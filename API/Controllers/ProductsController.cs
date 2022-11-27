@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace api.Controllers
+namespace API.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("API/[controller]")]
     public class ProductsController : ControllerBase
     {
         [HttpGet]
