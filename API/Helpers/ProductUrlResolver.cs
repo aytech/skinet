@@ -4,7 +4,7 @@ using API.Dtos;
 
 namespace API.Helpers
 {
-    public class ProductUrlResolver : IValueResolver<Product, ProductToReturnDto, string>
+    public class ProductUrlResolver : IValueResolver<Product, ProductToReturnDto, string?>
     {
         public IConfiguration configuration { get; set; }
 
@@ -13,13 +13,13 @@ namespace API.Helpers
             this.configuration = configuration;
         }
 
-        public string Resolve(Product source, ProductToReturnDto destination, string destMember, ResolutionContext context)
+        public string Resolve(Product source, ProductToReturnDto destination, string? destMember, ResolutionContext context)
         {
             if (!string.IsNullOrEmpty(source.PictureUrl))
             {
                 return configuration["ApiUrl"] + source.PictureUrl;
             }
-            return null;
+            return string.Empty;
         }
     }
 }
