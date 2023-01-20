@@ -14,6 +14,13 @@ builder.Services.AddDbContext<Infrastructure.Data.StoreContext>(options => optio
 builder.Services.AddApplicationServices();
 builder.Services.AddSwaggerDocumentation();
 builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: "AppPolicy", policy =>
+    {
+        policy.WithOrigins("https://localhost:4200").AllowAnyHeader().AllowAnyMethod();
+    });
+});
 
 var app = builder.Build();
 
@@ -37,9 +44,18 @@ using (var scope = app.Services.CreateScope())
 // Configure the HTTP request pipeline.
 app.UseMiddleware<ExceptionMiddleware>();
 app.UseStatusCodePagesWithReExecute("/errors/{0}");
+
 app.UseHttpsRedirection();
-app.UseAuthorization();
-app.UseSwaggerDocumentation();
-app.MapControllers();
+
+app.UseRouting();
 app.UseStaticFiles();
+
+app.UseCors("AppPolicy");
+
+app.UseAuthorization();
+
+app.UseSwaggerDocumentation();
+
+app.MapControllers();
+
 app.Run();
