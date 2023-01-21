@@ -4,3 +4,7 @@
 *.session.sql
 bin
 obj
+
+client/.angular
+client/.vscode
+client/node_modules
