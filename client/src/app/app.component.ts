@@ -1,7 +1,4 @@
 import { Component, OnInit } from '@angular/core'
-import { IProduct } from './models/product'
-import { IProducts } from './models/products'
-import { ProductService } from './services/product.service'
 
 @Component( {
   selector: 'app-root',
@@ -11,15 +8,8 @@ import { ProductService } from './services/product.service'
 export class AppComponent implements OnInit {
 
   title = 'SkiNet'
-  products: IProduct[] = []
 
-  constructor( private productService: ProductService ) { }
+  constructor() { }
 
-  ngOnInit(): void {
-    this.productService.getProducts()
-      .subscribe( {
-        next: ( value: IProducts ) => this.products = value.data,
-        error: (error: any) => console.log(error)
-      } )
-  }
+  ngOnInit(): void { }
 }
