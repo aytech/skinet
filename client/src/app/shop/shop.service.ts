@@ -14,13 +14,16 @@ export class ShopService {
 
   constructor( private http: HttpClient ) { }
 
-  getProducts( brandId?: number, typeId?: number ): Observable<IProducts | null> {
+  getProducts( brandId?: number, typeId?: number, sort?: string): Observable<IProducts | null> {
     let params = new HttpParams()
     if ( brandId !== undefined ) {
       params = params.append( "brandId", brandId.toString() )
     }
     if ( typeId !== undefined ) {
       params = params.append( "typeId", typeId.toString() )
+    }
+    if (sort !== undefined) {
+      params = params.append("sort", sort)
     }
     params = params.append( "pageSize", 50 )
     return this.http.get<IProducts>( `${ this.baseUrl }/products`, { observe: "response", params } )
