@@ -26,16 +26,8 @@
     <section class="col-9">
       <div class="d-flex justify-content-between align-items-center pb-2">
 
-        <header>
-          <span *ngIf="totalPageCount > 0">Showing
-            <strong>
-              {{((shopParameters.pageNumber - 1) * shopParameters.pageSize) + 1}} -
-              {{(shopParameters.pageNumber * shopParameters.pageSize) > totalPageCount ? totalPageCount :
-              (shopParameters.pageNumber * shopParameters.pageSize)}}
-            </strong> of <strong>{{totalPageCount}}</strong>
-            results</span>
-          <span *ngIf="totalPageCount === 0">There are <strong>0</strong> results for this filter</span>
-        </header>
+        <app-pagination-header [pageNumber]="shopParameters.pageNumber" [pageSize]="shopParameters.pageSize"
+          [totalPageCount]="totalPageCount"></app-pagination-header>
 
         <form class="row row-cols-lg-auto g-3 align-items-center mt-2">
           <input class="form-control my-2 me-2" style="width: 300px;" type="text" placeholder="Search">
@@ -53,11 +45,9 @@
           <app-product-item [product]="item"></app-product-item>
         </div>
       </div>
-      <div class="d-flex justify-content-center" *ngIf="totalPageCount > 0">
-        <pagination [boundaryLinks]="true" [totalItems]="totalPageCount" (pageChanged)="onPageChanged($event)"
-          [itemsPerPage]="shopParameters.pageSize" previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;"
-          lastText="&raquo;"></pagination>
-      </div>
+      
+      <app-pagination [pageSize]="shopParameters.pageSize" [totalPageCount]="totalPageCount" (pageChanged)="onPageChanged($event)"></app-pagination>
+
     </section>
   </div>
 </div>

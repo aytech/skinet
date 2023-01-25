@@ -76,8 +76,8 @@ export class ShopComponent implements OnInit {
     this.getProducts()
   }
 
-  onPageChanged( target: { page: number } ) {
-    this.shopParameters.setPageNumber( target.page )
+  onPageChanged( page: number ) {
+    this.shopParameters.setPageNumber( page )
     this.getProducts()
   }
 }
