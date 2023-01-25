@@ -4,6 +4,7 @@ import { map, Observable } from 'rxjs';
 import { IBrand } from '../shared/models/brands';
 import { IProducts } from '../shared/models/products';
 import { IProductType } from '../shared/models/productType';
+import { ShopParameters } from '../shared/models/shopParameters';
 
 @Injectable( {
   providedIn: 'root'
@@ -14,18 +15,20 @@ export class ShopService {
 
   constructor( private http: HttpClient ) { }
 
-  getProducts( brandId?: number, typeId?: number, sort?: string): Observable<IProducts | null> {
+  getProducts( parameters: ShopParameters ): Observable<IProducts | null> {
+    // getProducts( brandId?: number, typeId?: number, sort?: string): Observable<IProducts | null> {
     let params = new HttpParams()
-    if ( brandId !== undefined ) {
-      params = params.append( "brandId", brandId.toString() )
+    if ( parameters.brandId > 0 ) {
+      params = params.append( "brandId", parameters.brandId.toString() )
     }
-    if ( typeId !== undefined ) {
-      params = params.append( "typeId", typeId.toString() )
+    if ( parameters.typeId > 0 ) {
+      params = params.append( "typeId", parameters.typeId.toString() )
     }
-    if (sort !== undefined) {
-      params = params.append("sort", sort)
+    if ( parameters.sort !== undefined ) {
+      params = params.append( "sort", parameters.sort )
     }
-    params = params.append( "pageSize", 50 )
+    params = params.append("page", parameters.pageNumber.toString())
+    params = params.append("pageSize", parameters.pageSize.toString())
     return this.http.get<IProducts>( `${ this.baseUrl }/products`, { observe: "response", params } )
       .pipe( map( response => response.body ) )
   }
