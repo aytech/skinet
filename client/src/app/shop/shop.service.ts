@@ -27,8 +27,11 @@ export class ShopService {
     if ( parameters.sort !== undefined ) {
       params = params.append( "sort", parameters.sort )
     }
-    params = params.append("page", parameters.pageNumber.toString())
-    params = params.append("pageSize", parameters.pageSize.toString())
+    if ( parameters.search !== undefined ) {
+      params = params.append( "search", parameters.search )
+    }
+    params = params.append( "page", parameters.pageNumber.toString() )
+    params = params.append( "pageSize", parameters.pageSize.toString() )
     return this.http.get<IProducts>( `${ this.baseUrl }/products`, { observe: "response", params } )
       .pipe( map( response => response.body ) )
   }

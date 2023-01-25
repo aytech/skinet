@@ -30,11 +30,11 @@
           [totalPageCount]="totalPageCount"></app-pagination-header>
 
         <form class="row row-cols-lg-auto g-3 align-items-center mt-2">
-          <input class="form-control my-2 me-2" style="width: 300px;" type="text" placeholder="Search">
-          <button class="btn btn-outline-primary my-2">
+          <input class="form-control my-2 me-2" #search (keyup.enter)="onSearch($event)" style="width: 300px;" type="text" placeholder="Search">
+          <button class="btn btn-outline-primary my-2" (click)="onSearch($event)">
             Search
           </button>
-          <button class="btn btn-outline-success ms-2 my-2">
+          <button class="btn btn-outline-success ms-2 my-2" (click)="onReset($event)">
             Reset
           </button>
         </form>
@@ -45,8 +45,9 @@
           <app-product-item [product]="item"></app-product-item>
         </div>
       </div>
-      
-      <app-pagination [pageSize]="shopParameters.pageSize" [totalPageCount]="totalPageCount" (pageChanged)="onPageChanged($event)"></app-pagination>
+
+      <app-pagination [pageSize]="shopParameters.pageSize" [totalPageCount]="totalPageCount"
+        (pageChanged)="onPageChanged($event)"></app-pagination>
 
     </section>
   </div>

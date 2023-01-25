@@ -4,6 +4,7 @@ export class ShopParameters {
   sort: string = 'name'
   pageNumber: number = 1
   pageSize: number = 6
+  search?: string
 
   setPageNumber(value?: number) {
     this.pageNumber = value || 1
