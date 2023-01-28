@@ -5,7 +5,7 @@ import {
   HttpEvent,
   HttpInterceptor
 } from '@angular/common/http';
-import { catchError, Observable, throwError } from 'rxjs';
+import { catchError, delay, Observable, throwError } from 'rxjs';
 import { NavigationExtras, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 
@@ -16,29 +16,31 @@ export class ErrorInterceptor implements HttpInterceptor {
 
   intercept( request: HttpRequest<unknown>, next: HttpHandler ): Observable<HttpEvent<unknown>> {
     return next.handle( request )
-      .pipe( catchError( error => {
-        if ( error !== undefined ) {
-          if ( error.status === 400 ) {
-            if ( error.error.errors !== undefined ) {
-              throw error.error
-            } else {
+      .pipe(
+        catchError( error => {
+          if ( error !== undefined ) {
+            if ( error.status === 400 ) {
+              if ( error.error.errors !== undefined ) {
+                throw error.error
+              } else {
+                this.toastr.error( error.error.message, error.error.statusCode )
+              }
+            }
+            if ( error.status === 401 ) {
               this.toastr.error( error.error.message, error.error.statusCode )
             }
-          }
-          if ( error.status === 401 ) {
-            this.toastr.error( error.error.message, error.error.statusCode )
-          }
-          if ( error.status === 404 ) {
-            this.router.navigateByUrl( "/not-found" )
-          }
-          if ( error.status === 500 ) {
-            const navigationExtras: NavigationExtras = {
-              state: { error: error.error }
+            if ( error.status === 404 ) {
+              this.router.navigateByUrl( "/not-found" )
             }
-            this.router.navigateByUrl( "/server-error", navigationExtras )
+            if ( error.status === 500 ) {
+              const navigationExtras: NavigationExtras = {
+                state: { error: error.error }
+              }
+              this.router.navigateByUrl( "/server-error", navigationExtras )
+            }
           }
-        }
-        return throwError( () => new Error( error ) )
-      } ) )
+          return throwError( () => new Error( error ) )
+        } )
+      )
   }
 }
