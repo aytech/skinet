@@ -9,7 +9,7 @@ const routes: Routes = [
   { path: "", component: HomeComponent },
   { path: "test-error", component: TestErrorComponent },
   { path: "server-error", component: ServerErrorComponent },
-  { path: "notfound-error", component: NotFoundComponent },
+  { path: "not-found", component: NotFoundComponent },
   { path: "shop", loadChildren: () => import( "./shop/shop.module" ).then( mod => mod.ShopModule ) },
   { path: "**", redirectTo: "", pathMatch: "full" }
 ]
