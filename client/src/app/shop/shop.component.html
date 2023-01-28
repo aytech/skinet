@@ -30,7 +30,7 @@
           [totalPageCount]="totalPageCount"></app-pagination-header>
 
         <form class="row row-cols-lg-auto g-3 align-items-center mt-2">
-          <input class="form-control my-2 me-2" #search (keyup.enter)="onSearch($event)" style="width: 300px;" type="text" placeholder="Search">
+          <input class="form-control my-2 me-2 search" #search (keyup.enter)="onSearch($event)" type="text" placeholder="Search">
           <button class="btn btn-outline-primary my-2" (click)="onSearch($event)">
             Search
           </button>

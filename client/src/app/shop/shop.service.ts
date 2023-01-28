@@ -1,7 +1,8 @@
-import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
 import { IBrand } from '../shared/models/brands';
+import { IProduct } from '../shared/models/product';
 import { IProducts } from '../shared/models/products';
 import { IProductType } from '../shared/models/productType';
 import { ShopParameters } from '../shared/models/shopParameters';
@@ -16,7 +17,6 @@ export class ShopService {
   constructor( private http: HttpClient ) { }
 
   getProducts( parameters: ShopParameters ): Observable<IProducts | null> {
-    // getProducts( brandId?: number, typeId?: number, sort?: string): Observable<IProducts | null> {
     let params = new HttpParams()
     if ( parameters.brandId > 0 ) {
       params = params.append( "brandId", parameters.brandId.toString() )
@@ -34,6 +34,10 @@ export class ShopService {
     params = params.append( "pageSize", parameters.pageSize.toString() )
     return this.http.get<IProducts>( `${ this.baseUrl }/products`, { observe: "response", params } )
       .pipe( map( response => response.body ) )
+  }
+
+  getProduct( id: number ) {
+    return this.http.get<IProduct>( `${ this.baseUrl }/products/${ id }` )
   }
 
   getBrands(): Observable<IBrand[]> {

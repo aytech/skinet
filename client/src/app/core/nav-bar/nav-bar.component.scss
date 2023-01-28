@@ -10,3 +10,25 @@
   text-align: center;
   top: -12px;
 }
+
+a {
+  color: #343a40;
+  text-decoration: none;
+
+  &.active {
+    color: orange;
+  }
+}
+
+.app-nav {
+  font-size: larger;
+}
+
+.logo {
+  cursor: pointer;
+  max-height: 70px;
+
+  &:focus {
+    outline: none;
+  }
+}
