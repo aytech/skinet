@@ -8,13 +8,14 @@ using StackExchange.Redis;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddOptions();
+
 // Add services to the container.
 builder.Services.AddAutoMapper(typeof(MappingProfiles));
 builder.Services.AddControllers();
 builder.Services.AddDbContext<Infrastructure.Data.StoreContext>(options => options.UseSqlite("name=ConnectionStrings:DefaultConnection"));
-builder.Services.AddSingleton<ConnectionMultiplexer>(c => {
-    // var configuration = ConfigurationOptions.Parse(_config.GetConnectionString("Redis"), true);
-    return ConnectionMultiplexer.Connect("localhost");
+builder.Services.AddSingleton<IConnectionMultiplexer>(c => {
+    return ConnectionMultiplexer.Connect(builder.Configuration.GetValue<string>("ConnectionStrings:Redis"));
 });
 builder.Services.AddApplicationServices();
 builder.Services.AddSwaggerDocumentation();
