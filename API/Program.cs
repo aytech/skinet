@@ -4,6 +4,7 @@ using API.Middleware;
 using AutoMapper;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
+using StackExchange.Redis;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +12,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddAutoMapper(typeof(MappingProfiles));
 builder.Services.AddControllers();
 builder.Services.AddDbContext<Infrastructure.Data.StoreContext>(options => options.UseSqlite("name=ConnectionStrings:DefaultConnection"));
+builder.Services.AddSingleton<ConnectionMultiplexer>(c => {
+    // var configuration = ConfigurationOptions.Parse(_config.GetConnectionString("Redis"), true);
+    return ConnectionMultiplexer.Connect("localhost");
+});
 builder.Services.AddApplicationServices();
 builder.Services.AddSwaggerDocumentation();
 builder.Services.AddEndpointsApiExplorer();
