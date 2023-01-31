@@ -54,20 +54,21 @@
                     </td>
                     <td class="align-middle">
                       <div class="d-flex align-items-center">
-                        <i class="fa fa-minus-circle fa-2x text-warning me-2 actions"></i>
+                        <i class="fa fa-minus-circle fa-2x text-warning me-2 actions"
+                          (click)="decrementItemQuantity(item)"></i>
                         <span class="font-weight-bold quantity">
                           <strong>{{ item.quantity }}</strong>
                         </span>
-                        <i class="fa fa-plus-circle fa-2x text-warning mx-2 actions"></i>
+                        <i class="fa fa-plus-circle fa-2x text-warning mx-2 actions"
+                          (click)="incrementItemQuantity(item)"></i>
                       </div>
                     </td>
                     <td class="align-middle">
                       <strong>{{ item.price * item.quantity | currency }}</strong>
                     </td>
                     <td class="align-middle text-center">
-                      <a href="" class="text-danger">
-                        <i class="fa fa-trash" style="font-size: 2em;"></i>
-                      </a>
+                      <i class="fa fa-trash" style="font-size: 2em; cursor: pointer;"
+                        (click)="removeBasketItem(item)"></i>
                     </td>
                   </tr>
                 </tbody>
