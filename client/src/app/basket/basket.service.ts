@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, map } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { Basket, IBasket, IBasketItem } from '../shared/models/basket';
+import { Basket, IBasket, IBasketItem, IBasketTotals } from '../shared/models/basket';
 import { IProduct } from '../shared/models/product';
 
 @Injectable( {
@@ -13,8 +13,10 @@ export class BasketService {
   baseUrl = environment.apiUrl
 
   private basketSource = new BehaviorSubject<IBasket | null>( null )
+  private basketTotalSource = new BehaviorSubject<IBasketTotals | null>( null )
 
   basket$ = this.basketSource.asObservable()
+  basketTotal$ = this.basketTotalSource.asObservable()
 
   constructor( private http: HttpClient ) { }
 
@@ -23,13 +25,17 @@ export class BasketService {
       .pipe(
         map( ( basket: IBasket ) => {
           this.basketSource.next( basket )
+          this.calculateTotals()
         } )
       )
   }
 
   setBasket( basket: IBasket ) {
     return this.http.post<IBasket>( `${ this.baseUrl }/basket`, basket ).subscribe( {
-      next: value => this.basketSource.next( value ),
+      next: value => {
+        this.basketSource.next( value )
+        this.calculateTotals()
+      },
       error: error => console.log( error )
     } )
   }
@@ -45,6 +51,16 @@ export class BasketService {
       basket.items = this.addOrUpdateItem( basket.items, itemToAdd, quantity )
       this.setBasket( basket )
     }
+  }
+
+  private calculateTotals() {
+    const basket = this.getCurrentBasketValue()
+    const shipping = 0
+    const subtotal = basket === undefined || basket === null
+      ? 0
+      : basket.items.reduce( ( a, b ) => ( b.price * b.quantity ) + a, 0 )
+    const total = subtotal === undefined ? 0 : subtotal + shipping
+    this.basketTotalSource.next( { shipping, total, subtotal } )
   }
 
   private addOrUpdateItem( items: IBasketItem[], itemToAdd: IBasketItem, quantity: number ): IBasketItem[] {
