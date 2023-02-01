@@ -6,13 +6,13 @@
     <div class="col-6">
       <h3>{{product.name}}</h3>
       <p class="price">
-        <strong>{{product.price | currency}}</strong>
+        <strong>{{ product.price * quantity | currency }}</strong>
       </p>
       <div class="d-flex justify-content-start align-items-center">
-        <i class="fa fa-minus-circle text-warning me-2 actions"></i>
-        <span class="font-weight-bold quantity">2</span>
-        <i class="fa fa-plus-circle text-warning mx-2 actions"></i>
-        <button class="btn btn-outline-secondary btn-lg ms-4">Add to cart</button>
+        <i class="fa fa-minus-circle text-warning me-2 actions" (click)="decrementQuantity()"></i>
+        <span class="font-weight-bold quantity"><strong>{{ quantity }}</strong></span>
+        <i class="fa fa-plus-circle text-warning mx-2 actions" (click)="incrementQuantity()"></i>
+        <button class="btn btn-outline-primary btn-lg ms-4" (click)="addItemToBasket()">Add to cart</button>
       </div>
     </div>
     <div class="row mt-5">
