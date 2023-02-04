@@ -5,7 +5,14 @@
             "previewLimit": 50,
             "driver": "SQLite",
             "database": "${workspaceFolder:skinet}/API/skinet.db",
-            "name": "Skinet",
+            "name": "Skinet Shop",
+            "group": "skinet"
+        },
+        {
+            "previewLimit": 50,
+            "driver": "SQLite",
+            "database": "${workspaceFolder:skinet}/API/identity.db",
+            "name": "Skinet Identity",
             "group": "skinet"
         }
     ]
