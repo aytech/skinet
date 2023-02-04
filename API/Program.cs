@@ -26,7 +26,7 @@ builder.Services.AddSingleton<IConnectionMultiplexer>(c =>
     return ConnectionMultiplexer.Connect(builder.Configuration.GetValue<string>("ConnectionStrings:Redis"));
 });
 builder.Services.AddApplicationServices();
-builder.Services.AddIdentityServices();
+builder.Services.AddIdentityServices(builder.Configuration);
 builder.Services.AddSwaggerDocumentation();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddCors(options =>
@@ -72,6 +72,7 @@ app.UseStaticFiles();
 
 app.UseCors("AppPolicy");
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.UseSwaggerDocumentation();
