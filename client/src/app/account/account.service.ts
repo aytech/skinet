@@ -1,9 +1,53 @@
-import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http'
+import { Injectable } from '@angular/core'
+import { Router } from '@angular/router'
+import { BehaviorSubject, map } from 'rxjs'
+import { environment } from 'src/environments/environment'
+import { IUser } from '../shared/models/user'
 
-@Injectable({
+@Injectable( {
   providedIn: 'root'
-})
+} )
 export class AccountService {
 
-  constructor() { }
+  baseUrl = environment.apiUrl;
+
+  private currentUserSource = new BehaviorSubject<IUser | null>( null )
+
+  currentUser$ = this.currentUserSource.asObservable()
+
+  constructor( private http: HttpClient, private router: Router ) { }
+
+  login( values: any ) {
+    return this.http.post<IUser>( `${ this.baseUrl }/account/login`, values )
+      .pipe(
+        map( ( user: IUser ) => {
+          if ( user !== undefined ) {
+            localStorage.setItem( "token", user.token )
+            this.currentUserSource.next( user )
+          }
+        } )
+      )
+  }
+
+  register( values: any ) {
+    this.http.post<IUser>( `${ this.baseUrl }/account/register`, values )
+      .pipe(
+        map( ( user: IUser ) => {
+          if ( user !== undefined ) {
+            localStorage.setItem( "token", user.token )
+          }
+        } )
+      )
+  }
+
+  logout() {
+    localStorage.removeItem( "token" )
+    this.currentUserSource.next( null )
+    this.router.navigateByUrl( "/" )
+  }
+
+  checkEmailExists( email: string ) {
+    this.http.get( `${ this.baseUrl }/account/emailexists?email=${ email }` )
+  }
 }
