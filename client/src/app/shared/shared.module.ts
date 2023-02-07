@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core'
 import { CommonModule } from '@angular/common'
+import { BsDropdownModule } from 'ngx-bootstrap/dropdown'
 import { PaginationModule } from 'ngx-bootstrap/pagination'
 import { CarouselModule } from 'ngx-bootstrap/carousel'
 import { PaginationHeaderComponent } from './components/pagination-header/pagination-header.component'
@@ -19,6 +20,7 @@ import { ReactiveFormsModule } from '@angular/forms'
     CommonModule,
     PaginationModule.forRoot(),
     CarouselModule.forRoot(),
+    BsDropdownModule.forRoot(),
     ReactiveFormsModule
   ],
   exports: [
@@ -27,7 +29,8 @@ import { ReactiveFormsModule } from '@angular/forms'
     PaginationModule,
     PaginationComponent,
     PaginationHeaderComponent,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    BsDropdownModule
   ]
 } )
 export class SharedModule { }
