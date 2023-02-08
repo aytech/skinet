@@ -9,11 +9,4 @@
       <button [disabled]="loginForm.invalid" class="w-100 btn btn-lg btn-primary mt-3" type="submit">Sign in</button>
     </form>
   </main>
-  <div class="col-4">
-    <p>Form status: {{ loginForm.status }}</p>
-    <p>Email status: {{ loginForm.get("email")?.status }}</p>
-    <p>Email touched: {{ loginForm.get("email")?.touched }}</p>
-    <p>Email dirty: {{ loginForm.get("email")?.dirty }}</p>
-    <pre>{{ loginForm.value | json }}</pre>
-  </div>
 </div>

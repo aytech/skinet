@@ -23,9 +23,9 @@ export class AccountService {
   }
 
   loadCurrentUser( token: string ) {
-    let headers = new HttpHeaders({
+    let headers = new HttpHeaders( {
       "Authorization": `Bearer ${ token }`
-    })
+    } )
     return this.http.get<IUser>( `${ this.baseUrl }/account`, { headers } )
       .pipe(
         map( ( user: IUser ) => {
@@ -50,11 +50,12 @@ export class AccountService {
   }
 
   register( values: any ) {
-    this.http.post<IUser>( `${ this.baseUrl }/account/register`, values )
+    return this.http.post<IUser>( `${ this.baseUrl }/account/register`, values )
       .pipe(
         map( ( user: IUser ) => {
           if ( user !== undefined ) {
             localStorage.setItem( "token", user.token )
+            this.currentUserSource.next( user )
           }
         } )
       )
@@ -67,6 +68,6 @@ export class AccountService {
   }
 
   checkEmailExists( email: string ) {
-    this.http.get( `${ this.baseUrl }/account/emailexists?email=${ email }` )
+    return this.http.get<boolean>( `${ this.baseUrl }/account/email/exists?email=${ email }` )
   }
 }
