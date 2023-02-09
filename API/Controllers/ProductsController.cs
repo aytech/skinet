@@ -53,13 +53,13 @@ namespace API.Controllers
         [HttpGet("brands")]
         public async Task<ActionResult<IReadOnlyList<ProductBrand>>> GetProductBrands()
         {
-            return Ok(await productBrandRepository.listAllAsync());
+            return Ok(await productBrandRepository.ListAllAsync());
         }
 
         [HttpGet("types")]
         public async Task<ActionResult<IReadOnlyList<ProductBrand>>> GetProductTypes()
         {
-            return Ok(await productTypeRepository.listAllAsync());
+            return Ok(await productTypeRepository.ListAllAsync());
         }
     }
 }

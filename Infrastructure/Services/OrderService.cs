@@ -1,6 +1,7 @@
 using Core.Entities;
 using Core.Entities.OrderAggregate;
 using Core.Interfaces;
+using Core.Specifications;
 
 namespace Infrastructure.Services
 {
@@ -33,7 +34,7 @@ namespace Infrastructure.Services
             // 4. Calculate subtotal
             var subtotal = items.Sum(item => item.Price * item.Quantity);
             // 5. Create order
-            var order = new Order(items, buyerEmail, shippingAddress, deliveryMethod, subtotal);
+            var order = new Order(items, deliveryMethod!, buyerEmail, shippingAddress, subtotal);
             // 6. Persist the order
             unitOfWork.Repository<Order>().Add(order);
             var result = await unitOfWork.Complete();
@@ -50,19 +51,21 @@ namespace Infrastructure.Services
             return order;
         }
 
-        public Task<IReadOnlyList<DeliveryMethod>> GetDeliveryMethodsAsync()
+        public async Task<IReadOnlyList<DeliveryMethod>> GetDeliveryMethodsAsync()
         {
-            throw new NotImplementedException();
+            return await unitOfWork.Repository<DeliveryMethod>().ListAllAsync();
         }
 
-        public Task<Order> GetOrderByIdAsync(int id, string buyerEmail)
+        public async Task<Order?> GetOrderByIdAsync(int id, string buyerEmail)
         {
-            throw new NotImplementedException();
+            var specification = new OrdersWithItemsAndOrderingSpecification(id, buyerEmail);
+            return await unitOfWork.Repository<Order>().GetEntityWithSpec(specification);
         }
 
-        public Task<IReadOnlyList<Order>> GetOrdersForUserAsync(string buyerEmail)
+        public async Task<IReadOnlyList<Order>> GetOrdersForUserAsync(string buyerEmail)
         {
-            throw new NotImplementedException();
+            var specification = new OrdersWithItemsAndOrderingSpecification(buyerEmail);
+            return await unitOfWork.Repository<Order>().ListAsync(specification);
         }
     }
 }
