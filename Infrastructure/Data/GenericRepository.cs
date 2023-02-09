@@ -42,5 +42,21 @@ namespace Infrastructure.Data
         {
             return SpecificationEvaluator<T>.GetQuery(context.Set<T>().AsQueryable(), specification);
         }
+
+        void IGenericRepository<T>.Add(T entity)
+        {
+            context.Set<T>().Add(entity);
+        }
+
+        void IGenericRepository<T>.Update(T entity)
+        {
+            context.Set<T>().Attach(entity);
+            context.Entry(entity).State = EntityState.Modified;
+        }
+
+        void IGenericRepository<T>.Delete(T entity)
+        {
+            context.Set<T>().Remove(entity);
+        }
     }
 }
