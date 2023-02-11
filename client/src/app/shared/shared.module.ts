@@ -9,7 +9,9 @@ import { PaginationComponent } from './components/pagination/pagination.componen
 import { OrderTotalsComponent } from './components/order-totals/order-totals.component'
 import { ReactiveFormsModule } from '@angular/forms';
 import { TextInputComponent } from './components/text-input/text-input.component'
-import { StepperComponent } from './components/stepper/stepper.component'
+import { StepperComponent } from './components/stepper/stepper.component';
+import { BasketSummaryComponent } from './components/basket-summary/basket-summary.component'
+import { RouterModule } from '@angular/router'
 
 
 @NgModule( {
@@ -18,7 +20,8 @@ import { StepperComponent } from './components/stepper/stepper.component'
     PaginationComponent,
     OrderTotalsComponent,
     StepperComponent,
-    TextInputComponent
+    TextInputComponent,
+    BasketSummaryComponent
   ],
   imports: [
     CommonModule,
@@ -26,6 +29,7 @@ import { StepperComponent } from './components/stepper/stepper.component'
     CarouselModule.forRoot(),
     BsDropdownModule.forRoot(),
     ReactiveFormsModule,
+    RouterModule,
     CdkStepperModule
   ],
   exports: [
@@ -38,7 +42,8 @@ import { StepperComponent } from './components/stepper/stepper.component'
     BsDropdownModule,
     TextInputComponent,
     CdkStepperModule,
-    StepperComponent
+    StepperComponent,
+    BasketSummaryComponent
   ]
 } )
 export class SharedModule { }

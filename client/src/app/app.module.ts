@@ -11,6 +11,7 @@ import { ErrorInterceptor } from './core/interceptors/error.interceptor'
 import { ToastrModule } from 'ngx-toastr'
 import { NgxSpinnerModule } from 'ngx-spinner'
 import { LoadingInterceptor } from './core/interceptors/loading.interceptor'
+import { JwtInterceptor } from './core/interceptors/jwt.interceptor'
 
 @NgModule( {
   declarations: [
@@ -39,6 +40,11 @@ import { LoadingInterceptor } from './core/interceptors/loading.interceptor'
       multi: true,
       provide: HTTP_INTERCEPTORS,
       useClass: LoadingInterceptor
+    },
+    {
+      multi: true,
+      provide: HTTP_INTERCEPTORS,
+      useClass: JwtInterceptor
     }
   ],
   bootstrap: [
