@@ -1,35 +1,35 @@
-<ng-container *ngIf="basket$ | async">
+<ng-container *ngIf="items !== undefined && items.length > 0">
   <div class="table-responsive">
-    <table class="table">
-      <thead>
+    <table class="table table-borderless">
+      <thead [class.thead-light]="isBasket || isOrder" class="border-0" [class.bg-light]="isOrder || isBasket">
         <tr>
-          <th class="border-0" scope="col" [class.bg-light]="isBasket">
-            <div class="p-2 px-3 text-uppercase">
+          <th scope="col" style="padding: 1.20em;">
+            <div class="px-3 text-uppercase">
               Product
             </div>
           </th>
-          <th class="border-0" scope="col" [class.bg-light]="isBasket">
-            <div class="py-2 text-uppercase">Price</div>
+          <th scope="col" style="padding: 1.20em;">
+            <div class="text-uppercase text-center">Price</div>
           </th>
-          <th class="border-0" scope="col" [class.bg-light]="isBasket">
-            <div class="py-2 text-uppercase">Quantity</div>
+          <th scope="col" style="padding: 1.20em;">
+            <div class="text-uppercase text-center">Quantity</div>
           </th>
-          <th class="border-0" scope="col" [class.bg-light]="isBasket">
-            <div class="py-2 text-uppercase">Total</div>
+          <th scope="col" style="padding: 1.20em;">
+            <div class="text-uppercase text-center">Total</div>
           </th>
-          <th class="border-0" scope="col" [class.bg-light]="isBasket" *ngIf="isBasket">
-            <div class="py-2 text-uppercase">Remove</div>
+          <th scope="col" *ngIf="isBasket" class="border-0" style="padding: 1.20em;">
+            <div class="text-uppercase text-center">Remove</div>
           </th>
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let item of (basket$ | async)?.items">
+        <tr *ngFor="let item of items">
           <th scope="row">
             <div class="p-2">
               <img src="{{ item.pictureUrl }}" alt="{{ item.productName }}" class="img-fluid" style="max-height: 50px;">
               <div class="ms-3d-inline-block align-middle">
                 <h5 class="mb-0">
-                  <a routerLink="/shop/{{ item.id }}" class="text-dark">
+                  <a routerLink="/shop/{{  item.id || item.productId }}" class="text-dark">
                     {{ item.productName }}
                   </a>
                 </h5>
@@ -39,11 +39,11 @@
               </div>
             </div>
           </th>
-          <td class="align-middle">
+          <td class="align-middle text-center">
             <strong>{{ item.price | currency }}</strong>
           </td>
-          <td class="align-middle">
-            <div class="d-flex align-items-center" [class.justify-content-center]="!isBasket">
+          <td class="align-middle text-center">
+            <div class="d-flex align-items-center justify-content-center">
               <i *ngIf="isBasket" class="fa fa-minus-circle fa-2x text-warning me-2 actions"
                 (click)="decrementItemQuantity(item)"></i>
               <span class="font-weight-bold quantity">
@@ -53,7 +53,7 @@
                 (click)="incrementItemQuantity(item)"></i>
             </div>
           </td>
-          <td class="align-middle">
+          <td class="align-middle text-center">
             <strong>{{ item.price * item.quantity | currency }}</strong>
           </td>
           <td class="align-middle text-center" *ngIf="isBasket">

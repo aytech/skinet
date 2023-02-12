@@ -14,12 +14,25 @@ const routes: Routes = [
   { path: "shop", loadChildren: () => import( "./shop/shop.module" ).then( mod => mod.ShopModule ), data: { breadcrumb: "Shop" } },
   { path: "basket", loadChildren: () => import( "./basket/basket.module" ).then( mod => mod.BasketModule ), data: { breadcrumb: "Basket" } },
   {
-    path: "checkout",
     canActivate: [ AuthGuard ],
+    data: { breadcrumb: "Checkout" },
     loadChildren: () => import( "./checkout/checkout.module" ).then( mod => mod.CheckoutModule ),
-    data: { breadcrumb: "Checkout" }
+    path: "checkout"
   },
-  { path: "account", loadChildren: () => import( "./account/account.module" ).then( mod => mod.AccountModule ), data: { breadcrumb: { skip: true } } },
+  {
+    canActivate: [ AuthGuard ],
+    data: { breadcrumb: "Orders" },
+    loadChildren: () => import( "./orders/orders.module" )
+      .then( mod => mod.OrdersModule ),
+    path: "orders"
+  },
+  {
+    canActivate: [ AuthGuard ],
+    data: { breadcrumb: { skip: true } },
+    loadChildren: () => import( "./account/account.module" )
+      .then( mod => mod.AccountModule ),
+    path: "account",
+  },
   { path: "**", redirectTo: "not-found", pathMatch: "full" }
 ]
 
