@@ -5,6 +5,8 @@
 bin
 obj
 
+API/appsettings.json
+
 client/.angular
 client/.vscode
 client/node_modules
