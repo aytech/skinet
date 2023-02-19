@@ -27,7 +27,7 @@ export class CheckoutPaymentComponent implements AfterViewInit, OnDestroy {
   cardErrors: any
   cardHandler = this.onChange.bind( this )
 
-  constructor( private basketService: BasketService, private checkoutService: CheckoutService, private toastrService: ToastrService, private router: Router ) { }
+  constructor( private basketService: BasketService, private checkoutService: CheckoutService, private toastr: ToastrService, private router: Router ) { }
 
   ngAfterViewInit(): void {
     this.stripe = Stripe( 'pk_test_51Iq2jtE8am9Zmcu5AX9Q1pfrrZUA5kyQqvDou2lKkAmj2EpIZeErpvRfIx8dWBev8wZ0dTpADR1NpEHblsWcYtLN00q7L4qxSn' )
@@ -67,16 +67,28 @@ export class CheckoutPaymentComponent implements AfterViewInit, OnDestroy {
       this.checkoutService.createOrder( orderToCreate )
         .subscribe( {
           next: ( order: IOrder ) => {
-            console.info( `Order ${ order.id } created` )
-            console.info( order )
-            this.basketService.deleteLocalBasket( basket.id )
-            this.toastrService.success( "Order created successfully" )
-            const navigationExtras: NavigationExtras = { state: order }
-            this.router.navigate( [ "checkout/success" ], navigationExtras )
+            this.toastr.success( 'Order created successfully' )
+            this.stripe.confirmCardPayment( basket.clientSecret, {
+              payment_method: {
+                card: this.cardNumber,
+                billing_details: {
+                  name: this.checkoutForm.get( 'paymentForm' )?.get( 'nameOnCard' )?.value
+                }
+              }
+            } ).then( ( result: any ) => {
+              console.info( result )
+              if ( result.paymentIntent ) {
+                this.basketService.deleteLocalBasket( basket.id )
+                const navigationExtras: NavigationExtras = { state: order }
+                this.router.navigate( [ "checkout/success" ], navigationExtras )
+              } else {
+                this.toastr.error( result.error.message )
+              }
+            } )
           },
           error: error => {
             console.error( error )
-            this.toastrService.error( "Could not create order" )
+            this.toastr.error( "Could not create order" )
           }
         } )
     }
