@@ -18,8 +18,12 @@ namespace Infrastructure.Services
             this.configuration = configuration;
         }
 
-        public async Task<CustomerBasket?> CreateOrUpdatePaymentIntent(string basketId)
+        public async Task<CustomerBasket?> CreateOrUpdatePaymentIntent(string? basketId)
         {
+            if (basketId == null) {
+                return null;
+            }
+            
             StripeConfiguration.ApiKey = configuration["StripeSettings:SecretKey"];
 
             var basket = await basketRepository.GetBasketAsync(basketId);
