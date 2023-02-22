@@ -1,6 +1,7 @@
 using Core.Entities;
 using Core.Entities.OrderAggregate;
 using Core.Interfaces;
+using Core.Specifications;
 using Microsoft.Extensions.Configuration;
 using Stripe;
 
@@ -20,10 +21,11 @@ namespace Infrastructure.Services
 
         public async Task<CustomerBasket?> CreateOrUpdatePaymentIntent(string? basketId)
         {
-            if (basketId == null) {
+            if (basketId == null)
+            {
                 return null;
             }
-            
+
             StripeConfiguration.ApiKey = configuration["StripeSettings:SecretKey"];
 
             var basket = await basketRepository.GetBasketAsync(basketId);
@@ -78,6 +80,42 @@ namespace Infrastructure.Services
             }
 
             return basket;
+        }
+
+        async Task<Order?> IPaymentService.UpdateOrderPaymentFailed(string paymentIntentId)
+        {
+            var specification = new OrderByPaymentIntentIdSpecification(paymentIntentId);
+            var order = await unitOfWork.Repository<Order>().GetEntityWithSpec(specification);
+
+            if (order == null)
+            {
+                return null;
+            }
+
+            order.Status = OrderStatus.PaymentFailed;
+            unitOfWork.Repository<Order>().Update(order);
+
+            await unitOfWork.Complete();
+
+            return order;
+        }
+
+        async Task<Order?> IPaymentService.UpdateOrderPaymentSucceeded(string paymentIntentId)
+        {
+            var specification = new OrderByPaymentIntentIdSpecification(paymentIntentId);
+            var order = await unitOfWork.Repository<Order>().GetEntityWithSpec(specification);
+
+            if (order == null)
+            {
+                return null;
+            }
+
+            order.Status = OrderStatus.PaymentReceived;
+            unitOfWork.Repository<Order>().Update(order);
+
+            await unitOfWork.Complete();
+
+            return order;
         }
     }
 }
