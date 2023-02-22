@@ -4,7 +4,7 @@ import { NavigationExtras, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { BasketService } from 'src/app/basket/basket.service';
 import { IBasket } from 'src/app/shared/models/basket';
-import { IOrder, IOrderToCreate } from 'src/app/shared/models/order';
+import { IOrderToCreate } from 'src/app/shared/models/order';
 import { CheckoutService } from '../checkout.service';
 
 declare var Stripe: any
@@ -27,6 +27,10 @@ export class CheckoutPaymentComponent implements AfterViewInit, OnDestroy {
   cardErrors: any
   cardHandler = this.onChange.bind( this )
   loading: boolean = false
+
+  cardNumberValid: boolean = false;
+  cardExpiryValid: boolean = false;
+  cardCvcValid: boolean = false;
 
   constructor( private basketService: BasketService, private checkoutService: CheckoutService, private toastr: ToastrService, private router: Router ) { }
 
@@ -53,11 +57,22 @@ export class CheckoutPaymentComponent implements AfterViewInit, OnDestroy {
     this.cardCvc.destroy()
   }
 
-  onChange( { error }: any ) {
-    if ( error ) {
-      this.cardErrors = error.message
+  onChange( event: any ) {
+    if ( event.error ) {
+      this.cardErrors = event.error.message
     } else {
       this.cardErrors = null
+    }
+    switch ( event.elementType ) {
+      case "cardNumber":
+        this.cardNumberValid = event.complete
+        break
+      case "cardExpiry":
+        this.cardExpiryValid = event.complete
+        break
+      case "cardCvc":
+        this.cardCvcValid = event.complete
+        break
     }
   }
 
