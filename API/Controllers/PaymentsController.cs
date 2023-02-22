@@ -9,7 +9,7 @@ namespace API.Controllers
 {
     public class PaymentsController : BaseApiController
     {
-        private const string WebhookSecret = "";
+        private const string WebhookSecret = "<add Stripe webhook secret>";
         private readonly IPaymentService paymentService;
         private readonly ILogger<PaymentsController> logger;
 
