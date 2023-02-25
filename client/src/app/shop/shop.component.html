@@ -4,7 +4,7 @@
       <ng-container *ngIf="productTypes && brands">
         <h5 class="text-warning ml-3 mt-4 mb-3">Sort</h5>
         <select class="form-select mb-4" (change)="onSortSelected($event.target)">
-          <option *ngFor="let sort of sortOptions" [value]="sort.value">
+          <option *ngFor="let sort of sortOptions" [selected]="shopParameters.sort === sort.value" [value]="sort.value">
             {{sort.name}}
           </option>
         </select>
@@ -49,8 +49,8 @@
         </div>
       </div>
 
-      <app-pagination [pageSize]="shopParameters.pageSize" [totalPageCount]="totalPageCount"
-        (pageChanged)="onPageChanged($event)"></app-pagination>
+      <app-pagination [pageSize]="shopParameters.pageSize" [pageNumber]="shopParameters.pageNumber"
+        [totalPageCount]="totalPageCount" (pageChanged)="onPageChanged($event)"></app-pagination>
 
     </section>
   </div>

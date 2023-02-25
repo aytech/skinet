@@ -8,6 +8,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 export class PaginationComponent {
   @Input() totalPageCount: number = 0
   @Input() pageSize: number = 0
+  @Input() pageNumber: number = 1
   @Output() pageChanged = new EventEmitter<number>()
 
   onPageChanged( event: any ) {
