@@ -17,11 +17,8 @@ builder.Services.AddOptions();
 // Add services to the container.
 builder.Services.AddAutoMapper(typeof(MappingProfiles));
 builder.Services.AddControllers();
-builder.Services.AddDbContext<StoreContext>(options => options.UseSqlite("name=ConnectionStrings:DefaultConnection"));
-builder.Services.AddDbContext<AppIdentityDbContext>(options =>
-{
-    options.UseSqlite("name=ConnectionStrings:IdentityConnection");
-});
+builder.Services.AddDbContext<StoreContext>(options => options.UseNpgsql(builder.Configuration.GetValue<string>("ConnectionStrings:DefaultConnection")));
+builder.Services.AddDbContext<AppIdentityDbContext>(options => options.UseNpgsql(builder.Configuration.GetValue<string>("ConnectionStrings:IdentityConnection")));
 builder.Services.AddSingleton<IConnectionMultiplexer>(c =>
 {
     return ConnectionMultiplexer.Connect(builder.Configuration.GetValue<string>("ConnectionStrings:Redis"));

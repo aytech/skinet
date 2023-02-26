@@ -9,14 +9,15 @@ namespace API.Controllers
 {
     public class PaymentsController : BaseApiController
     {
-        private const string WebhookSecret = "<add Stripe webhook secret>";
+        private readonly string webhookSecret;
         private readonly IPaymentService paymentService;
         private readonly ILogger<PaymentsController> logger;
 
-        public PaymentsController(IPaymentService paymentService, ILogger<PaymentsController> logger)
+        public PaymentsController(IPaymentService paymentService, ILogger<PaymentsController> logger, IConfiguration configuration)
         {
             this.paymentService = paymentService;
             this.logger = logger;
+            webhookSecret = configuration.GetSection("StripeSettings:WebhookSecret").Value;
         }
 
         [Authorize]
@@ -36,7 +37,7 @@ namespace API.Controllers
         public async Task<ActionResult> StripeWebhook()
         {
             var json = await new StreamReader(HttpContext.Request.Body).ReadToEndAsync();
-            var stripeEvent = EventUtility.ConstructEvent(json, Request.Headers["Stripe-Signature"], WebhookSecret);
+            var stripeEvent = EventUtility.ConstructEvent(json, Request.Headers["Stripe-Signature"], webhookSecret);
 
             PaymentIntent intent;
             Core.Entities.OrderAggregate.Order? order;
@@ -56,7 +57,8 @@ namespace API.Controllers
                     intent = (PaymentIntent)stripeEvent.Data.Object;
                     logger.LogInformation("Payment failed: ", intent.Id);
                     order = await paymentService.UpdateOrderPaymentFailed(intent.Id);
-                    if (order != null) {
+                    if (order != null)
+                    {
                         logger.LogError("Payment failed: ", order.Id);
                     }
                     break;
