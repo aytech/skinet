@@ -1,8 +1,9 @@
 export interface IEnvironment {
   production: boolean,
-  apiUrl?: string
+  apiUrl: string
 }
 
 export const environment: IEnvironment = {
-  production: true
+  production: true,
+  apiUrl: "api"
 }

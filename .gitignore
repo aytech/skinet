@@ -6,6 +6,7 @@ bin
 obj
 
 API/appsettings.json
+API/wwwroot
 
 client/.angular
 client/.vscode
